@@ -1,8 +1,9 @@
 '''
-This module collects configs from cmd arguments, and generate a Kafka consumer object and a dataset db
+This module collects configs from cmd arguments, and generate a Kafka consumer object, a dataset db object and a logger
 '''
-# import dataset
-# from kafka import KafkaConsumer
+import dataset
+# There are many kafka module, we use kafka-python here
+from kafka import KafkaConsumer
 import argparse
 
 parser = argparse.ArgumentParser(
@@ -19,8 +20,10 @@ parser.add_argument('-o', '--offset', choices = ['earliest', 'latest'], default 
 # database configs
 parser.add_argument('-d', '--database', help = r'database server in format {protocol}://{username}:{pwd}@{ip}:{port}/{schema}', required=True)
 
+# log path
+parser.add_argument('-l', '--logpath', default = '.')
+
 args = parser.parse_args()
 
-# CONSUMER = KafkaConsumer(args.topic, bootstrap_servers=args.bootstrap, auto_offset_reset=args.offset)
-# Connect to the database
-# DB = dataset.connect(args.database)
+CONSUMER = KafkaConsumer(args.topic, bootstrap_servers=args.bootstrap, auto_offset_reset=args.offset)
+DB = dataset.connect(args.database)
