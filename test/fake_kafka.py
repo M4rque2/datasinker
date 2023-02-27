@@ -1,5 +1,6 @@
-from collections import Iterator
+from collections.abc import Iterator
 from json import dumps
+from .fake_data import BASIC_DATA
 
 class FakeMessage():
     '''A fake kafka message class'''
@@ -30,7 +31,7 @@ class FakeConsumer():
             self.msg_gen = self.msg_gen()
 
     @staticmethod
-    def basic_msg_gen():
+    def basic_msg_gen(value = BASIC_DATA):
         '''
         basic message generator
         这里约定：
@@ -39,10 +40,7 @@ class FakeConsumer():
         Python sql客户端会自动转换数据类型，根据胡一刀原则，多一刀不如少一刀。
         '''
         fake_key = 'test'
-        fake_value = {
-            "crawl_time":"2023-02-25",
-            "data" : "some test data"
-        }
+        fake_value = value
         fk = FakeMessage(fake_key.encode(), dumps(fake_value).encode())
         yield fk
 

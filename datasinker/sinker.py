@@ -5,20 +5,22 @@
 # 同理，关闭程序时也不建议直接关，会丢失数据，使用 kill -SIGTERM 安全结束程序
 
 import os
-
+import logging
 from json import loads
 from json.decoder import JSONDecodeError
 
 class Sinker():
     '''从kafka读取数据, 入库TiDB'''
-    def __init__(self, db, consumer, logger):
+    def __init__(self, db, consumer, logger=None):
         # 传入pymysql的connector对象，
         # 传入KafkaConsumer
         # 数据库有MySQL和TiDB，TiDB有2套环境，kafka有多个topic，以上每一种组合，起一个独立进程。
         self.db = db
         self.consumer = consumer
-        self.logger = logger
-
+        if not logger:
+            self.logger = logging.getLogger(__name__)
+        else:  
+            self.logger = logger
         pid = os.getpid()
         self.logger.info("TiDB sinker pro started at pid {}".format(pid))
 
@@ -44,6 +46,6 @@ class Sinker():
             try:
                 # 如果ensure为True或者None，当dict和数据库表里的字段对不上时。会修改表结构，强行插入。这里设为False，不允许修改表结构。
                 # dataset有一个bug还没修，如果表结构和数据不匹配，会插入一条空记录，自增id加一条。
-                table.insert(msg_json, ensure=False)
+                table.insert(msg_json)
             except Exception as e:
                 self.logger.error(e)

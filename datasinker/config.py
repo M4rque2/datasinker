@@ -26,4 +26,5 @@ parser.add_argument('-l', '--logpath', default = '.')
 args = parser.parse_args()
 
 CONSUMER = KafkaConsumer(args.topic, bootstrap_servers=args.bootstrap, auto_offset_reset=args.offset)
-DB = dataset.connect(args.database)
+# ensure_shcema 一定要设置为False，不然dataset会修改数据库的数据结构，切记切记！！
+DB = dataset.connect(args.database, ensure_schema=False)
