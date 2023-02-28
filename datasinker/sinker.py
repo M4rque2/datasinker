@@ -45,7 +45,8 @@ class Sinker():
 
             try:
                 # 如果ensure为True或者None，当dict和数据库表里的字段对不上时。会修改表结构，强行插入。这里设为False，不允许修改表结构。
-                # dataset有一个bug还没修，如果表结构和数据不匹配，会插入一条空记录，自增id加一条。
+                # 特别注意，如果使用pudo原版dataset，数据中出现表中没有的列时，会直接删掉多余的列入库，不给任何错误提示
+                # dataset有一个bug，如果表结构和数据不匹配，会插入一条空记录，自增id加一条。
                 table.insert(msg_json)
             except Exception as e:
                 self.logger.error(e)
