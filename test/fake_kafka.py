@@ -31,7 +31,7 @@ class FakeConsumer():
             self.msg_gen = self.msg_gen()
 
     @staticmethod
-    def basic_msg_gen(value = BASIC_DATA):
+    def basic_msg_gen(data = BASIC_DATA):
         '''
         basic message generator
         这里约定：
@@ -39,8 +39,9 @@ class FakeConsumer():
         kafka value必须是JSON格式，json key指定数据表column name，json value强烈建议使用text格式
         Python sql客户端会自动转换数据类型，根据胡一刀原则，多一刀不如少一刀。
         '''
-        fake_key = 'test'
-        fake_value = value
+        fake_key = data['kafka_key']
+        fake_value = data['kafka_value']
+        print(fake_value)
         fk = FakeMessage(fake_key.encode(), dumps(fake_value).encode())
         yield fk
 
