@@ -1,6 +1,8 @@
 '''
 This module collects configs from cmd arguments, and generate a Kafka consumer object, a dataset db object and determine log config
 '''
+# https://github.com/pudo/dataset/issues/411
+# dataset不兼容sqlalchemy2.0 作者也不想跟进了，这里迟早需要优化
 import dataset
 # There are many kafka module, we use kafka-python here
 from kafka import KafkaConsumer
