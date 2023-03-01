@@ -1,8 +1,8 @@
 from collections.abc import Iterator
 from json import dumps
-from .fake_data import BASIC_DATA
+from .mock_data import BASIC_DATA
 
-class FakeMessage():
+class MockMessage():
     '''A fake kafka message class'''
     def __init__(self, key, value):
         if not isinstance(key, bytes):
@@ -20,7 +20,7 @@ class FakeMessage():
     def value(self):
         return self._value
 
-class FakeConsumer():
+class MockConsumer():
     '''a fake kafka consumer class'''
     def __init__(self, msg_gen=None):
         if not msg_gen:
@@ -41,9 +41,9 @@ class FakeConsumer():
         '''
         fake_key = data['kafka_key']
         fake_value = data['kafka_value']
-        print(fake_value)
-        fk = FakeMessage(fake_key.encode(), dumps(fake_value).encode())
-        yield fk
+        fk = MockMessage(fake_key.encode(), dumps(fake_value).encode())
+        for _ in range(100):
+            yield fk
 
     def __iter__(self):
         return self
